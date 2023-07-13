@@ -56,7 +56,10 @@ def train(gpu, args):
     
     torch.cuda.set_device(gpu)
     model.cuda(gpu)
-    batch_size = 5
+    
+    # Effective batch size of 10 for 2 GPUs
+    batch_size = 5 
+    
     # define loss function (criterion) and optimizer
     criterion = nn.CrossEntropyLoss().cuda(gpu)
     optimizer = torch.optim.SGD(model.parameters(), 1e-4)

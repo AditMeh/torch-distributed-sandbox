@@ -40,7 +40,10 @@ def train(gpu, args):
 
     torch.cuda.set_device(gpu)
     model.cuda(gpu)
+    
+    # OOM when you turn this to 10 on an A5000
     batch_size = 5
+    
     # define loss function (criterion) and optimizer
     criterion = nn.CrossEntropyLoss().cuda(gpu)
     optimizer = torch.optim.SGD(model.parameters(), 1e-4)
