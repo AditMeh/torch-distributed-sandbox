@@ -25,7 +25,7 @@ def run(world_size, rank, steps):
         # group all ranks
         ranks = list(range(world_size))
         group = dist.new_group(ranks=ranks)
-
+        
         # compute reduced sum
         tensor = torch.tensor(value, dtype=torch.int).to(f'cuda:{rank}')
         dist.all_reduce(tensor, op=dist.ReduceOp.SUM, group=group)
@@ -70,14 +70,9 @@ def main():
     parser.add_argument('--steps', type=int, default=20)
     args = parser.parse_args()
 
-    # dist.init_process_group(
-    #     backend=args.backend,
-    #     world_size=args.world_size,
-    #     rank=args.rank,
-    # )
-
     # run(args.world_size, args.rank, args.steps)
     mp.spawn(setup, args=[args.world_size], nprocs = args.world_size)
-
+    # Runs setup(i, *args), for i in {0, .. nprocs-} 
+    
 if __name__ == '__main__':
     main()
